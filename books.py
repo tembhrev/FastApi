@@ -9,20 +9,21 @@ BOOKS = [
     {'title': 'Title Three', 'author': 'Author Three', 'category': 'history'},
     {'title': 'Title Four', 'author': 'Author Four', 'category': 'math'},
     {'title': 'Title Five', 'author': 'Author Five', 'category': 'math'},
-    {'title': 'Title Six', 'author': 'Author Two', 'category': 'math'}
+    {'title': 'Title Six', 'author': 'Author Two', 'category': 'math'},
+    {'title': 'Title Seven', 'author': 'Author One', 'category': 'math'}
 ]
 
-@app.get("/books")
-async def read_all_books():
-    return BOOKS
+# @app.get("/books")
+# async def read_all_books():
+#     return BOOKS
 
 
 
-# @app.get("/books/{book_title}")
-# async def read_all_books(book_title: str):
-#     for book in BOOKS:
-#         if book.get('title').casefold() == book_title.casefold():
-#             return book
+@app.get("/books/{book_title}")
+async def read_all_books(book_title: str):
+    for book in BOOKS:
+        if book.get('title').casefold() == book_title.casefold():
+            return book
 
 @app.get("/books/")
 async def read_category_by_query(category: str):
@@ -61,6 +62,18 @@ async def delete_book(book_title: str):
             BOOKS.pop(i)
             break
 
+# 1. Create a new API Endpoint that can fetch all books from a specific 
+# author using either Path Parameters or Query Parameters.
+
+
+@app.get("/fetch_books/{book_author}")
+async def read_author_by_books(book_author: str):
+    books_to_return = []
+    for book in BOOKS:
+        if book.get('author').casefold() == book_author.casefold():
+            books_to_return.append(book)
+            
+    return books_to_return
 
 
 
