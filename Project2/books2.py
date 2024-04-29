@@ -1,4 +1,4 @@
-from fastapi import Body, FastAPI
+from fastapi import Body, Path, Query, FastAPI
 from pydantic import BaseModel, Field
 from typing import Optional
 
@@ -50,6 +50,21 @@ BOOKS = [
 @app.get("/books")
 async def read_all_books():
     return BOOKS
+
+@app.get("/books/{book_id}")
+async def read_book(book_id: int = Path(gt=0)):
+    for book in BOOKS:
+        if book.id == book_id:
+            return book
+
+@app.get("/books/")
+async def read_book_by_rating(book_rating: int = Query(gt=0, lt=6)):
+    books_to_return = []
+    for book in BOOKS:
+        if book.rating == book_rating:
+            books_to_return.append(book)
+    
+    return books_to_return
 
 @app.post("/create-book")
 async def create_book(book_request: BookRequest):
